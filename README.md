@@ -9,7 +9,7 @@ Nur Moh. Ihsanuddien | 05111940000142
 ## Pengaturan Awal 
 
 ### Pengaturan Topologi
-<img src="img/M02-0.1.png>
+<img src="img/M02-0.1.png">
 
 ### Edit Konfigurasi Network
 
