@@ -344,6 +344,6 @@ Setelah itu, buka `/var/www/super.franky.d09.com/.htaccess` dan tambahkan :
 ## Error dan Kendala
 - Kesalahan dalam pembuatan script (kami membuat setiap soal beda script tidak jadi satu) sehingga konfigurasinya berubah mengikuti perintah yang baru bukan menggabungkan dari awal.
 
-<img src="img/M02-E1.png">
+<img src="img/M02-E1.jpg">
 
-<img src="img/M02-E2.png">
+<img src="img/M02-E2.jpg">
