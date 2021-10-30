@@ -423,103 +423,11 @@ Pertama buka Skypie, kemudian pindah ke `/etc/apache2/sites-available` lalu buka
 <img src="img/M02-13.png">
 
 
-## No 14
-Dan Luffy meminta untuk web www.general.mecha.franky.yyy.com hanya bisa diakses dengan port 15000 dan port 15500.
-
-Pertama buka Skypie, kemudian pindah ke `/etc/apache2/sites-available`. Lalu copy file `000-default.conf` menjadi file `general.mecha.franky.d09.com.conf`. Setelah itu, buka file tersebut dan tambahkan isinya sebagai berikut :
-```
-    <VirtualHost *:15000 *:15500>
-    # The ServerName directive sets the request scheme, hostname and port thh
-    at
-    # the server uses to identify itself. This is used when creating
-    # redirection URLs. In the context of virtual hosts, the ServerName
-    # specifies what hostname must appear in the request's Host: header to
-    # match this virtual host. For the default virtual host (this file) this
-    # value is not decisive as it is used as a last resort host regardless.
-    # However, you must set it for any further virtual host explicitly.
-    #ServerName www.example.com
-
-    ServerAdmin webmaster@localhost
-    #DocumentRoot /var/www/html
-    ServerName general.mecha.franky.d09.com
-    ServerAlias www.general.mecha.franky.d09.com
-    DocumentRoot /var/www/general.mecha.franky.d09.com
-```
-Kemudian buka `/etc/apache2/ports.conf` dan tambahkan 
-```
-    Listen 15000
-    Listen 15500
-```
-Kemudian buat directory baru dengan nama `general.mecha.franky.d09.com` pada `/var/www/` menggunakan command `mkdir /var/www/general.mecha.franky.d09.com`. Setelah itu, copy isi dari folder `general.mecha.franky` yang telah didownload ke `/var/www/general.mecha.franky.d09.com`.
-```
-    cp /root/Praktikum-Modul-2-Jarkom-main/general.mecha.franky/* /var/www/general.mecha.franky.d09.com
-```
-Kemudian jalankan perintah `a2ensite general.mecha.franky.d09.com` dan `service apache2 restart`.
-
-
-## No 15
-Dengan authentikasi username luffy dan password onepiece dan file di /var/www/general.mecha.franky.yyy
-
-Pertama buka Skypie, kemudian jalankan perintah `htpasswd -c /etc/apache2/.htpasswd luffy` untuk membuat file yang menyimpan username dan password kedalam file `/etc/apache2/.htpasswd` dengan user `luffy`, lalu akan ada prompt untuk memasukkan dan mengkonfirmasi password. Passwordnya `onepiece`
-
-Kemudian, buka file `/etc/apache2/sites-available/general.mecha.franky.d09.com.conf` dan edit isinya menjadi :
-```
-    <Directory /var/www/general.mecha.franky.d09.com>
-    Options +FollowSymLinks -Multiviews
-    AllowOverride All
-    </Directory>
-```
-Setelah itu, buka file `/var/www/general.mecha.franky.d09.com/.htaccess` dan edit menambahkan :
-```
-    AuthType Basic
-    AuthName "Restricted Content"
-    AuthUserFile /etc/apache2/.htpasswd
-    Require valid-user
-```
-Kemudian, jalankan perintah `service apache2 restart`.
-
-
-## No 16
-Dan setiap kali mengakses IP EniesLobby akan diahlikan secara otomatis ke www.franky.yyy.com
-
-Pertama buka Skypie, kemudian pindah ke `/var/www/html` dan edit file `.htaccess` menjadi :
-```
-    RewriteEngine On
-    RewriteBase /~new/
-    RewriteCond %{HTTP_HOST} ^192\.195\.2\.4$
-    RewriteRule ^(.*)$ franky.d07.com [L,R=301]
-```
-Lalu buka file `/etc/apache2/sites-available/000-default.conf` dan edit isinya menjadi :
-```
-    <Directory /var/www/html>
-    Options +FollowSymLinks -Multiviews
-    AllowOverride All
-    </Directory>
-```
-Kemudian, jalankan perintah `service apache2 restart`.
-
-
-## No 17
-Dikarenakan Franky juga ingin mengajak temannya untuk dapat menghubunginya melalui website www.super.franky.yyy.com, dan dikarenakan pengunjung web server pasti akan bingung dengan randomnya images yang ada, maka Franky juga meminta untuk mengganti request gambar yang memiliki substring “franky” akan diarahkan menuju franky.png.
-
-Pertama buka Skypie, kemudian edit file `/etc/apache2/sites-available/super.franky.d09.com.conf` dengan menambahkan :
-```
-<Directory /var/www/super.franky.d09.com>
-                Options +FollowSymLinks -Multiviews
-                AllowOverride All
-        </Directory>
-```
-Setelah itu, buka `/var/www/super.franky.d09.com/.htaccess` dan tambahkan :
-```
-    RewriteEngine ON
-    RewriteRule ^(.*)franky(.*)$ http://super.franky.d07.com/public/images/franky.pnn
-    g [L,R]
-```
-
-
 ## Error dan Kendala
 - Kesalahan dalam pembuatan script (kami membuat setiap soal beda script tidak jadi satu) sehingga konfigurasinya berubah mengikuti perintah yang baru bukan menggabungkan dari awal.
 
 <img src="img/M02-E1.jpg">
 
 <img src="img/M02-E2.jpg">
+
+- Terkadang lupa menjalankan script yang seharusnya dijalankan terlebih dahulu sebelum menajalankan script untuk menyelesaikan soal.
