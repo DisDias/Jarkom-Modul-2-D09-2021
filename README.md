@@ -122,10 +122,58 @@ Alabasta
 ## No 3
 Setelah itu buat subdomain super.franky.yyy.com dengan alias www.super.franky.yyy.com yang diatur DNS nya di EniesLobby dan mengarah ke Skypie.
 
+#### EniesLobby
+1. menambahkan seperti berikut pada `/etc/bind/named.conf.local`
+```
+zone "super.franky.d09.com" {
+            type master;
+            file "/etc/bind/kaizoku/super.franky.d09.com";
+ };
+```
+2. melakukan copy file ke folder kaizoku `cp /etc/bind/db.local /etc/bind/kaizoku/super.franky.d09.com`
+3. mengedit isi dari `/etc/bind/kaizoku/super.franky.d09.com` dengan konfigurasi sebagi berikut :
+![image](https://user-images.githubusercontent.com/65032157/139533255-4780739f-898d-47fe-b8f9-816556921720.png)
+
+4. Restart bind9 `service bind9 restart` 
+
+#### Pada Alabasta dan Logue Town
+1. Dilakukan pengecekan subdomain
+a. LogueTown
+![image](https://user-images.githubusercontent.com/65032157/139533328-65baa9ee-2e6a-44bf-aa0e-b37347cd0d13.png)
+
+b.Alabasta
+![image](https://user-images.githubusercontent.com/65032157/139533341-2163b51f-0779-4fe3-8a54-2af5a1c026ca.png)
+
 
 ## No 4
 Buat juga reverse domain untuk domain utama
 
+#### EniesLobby
+1. menambahkan konfigurasi seperti berikut pada `/etc/bind/named.conf.local`
+```
+zone "2.196.192.in-addr.arpa" {
+    type master;
+    file "/etc/bind/kaizoku/2.196.192.in-addr.arpa";
+};
+```
+2. melakukan copy `cp /etc/bind/db.local /etc/bind/kaizoku/2.196.192.in-addr.arpa`
+3. melakukan edit pada `/etc/bind/kaizoku/2.196.192.in-addr.arpa` seperti berikut:
+![image](https://user-images.githubusercontent.com/65032157/139533445-542444d5-1aac-4240-9882-7bd2c9eae1a3.png)
+4. Restart bind9 `service bind9 restart `
+
+##### LogueTown dan Alabasta
+1. melakukan perintah pada masing-masing client
+```
+apt-get update
+apt-get install dnsutils
+```
+
+2. Selanjutnya mengecek dengan melakukan `host -t PTR 192.196.2.2`
+a. Alabasta 
+![image](https://user-images.githubusercontent.com/65032157/139533623-8505e937-6f7b-4230-a940-a4a98b619881.png)
+
+b. LogueTown
+![image](https://user-images.githubusercontent.com/65032157/139533639-de98ad49-287b-4183-a475-59c33b21593a.png)
 
 ## No 5
 Supaya tetap bisa menghubungi Franky jika server EniesLobby rusak, maka buat Water7 sebagai DNS Slave untuk domain utama
