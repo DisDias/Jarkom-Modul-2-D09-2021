@@ -75,9 +75,48 @@ iface eth0 inet static
 ## No 1
 EniesLobby akan dijadikan sebagai DNS Master, Water7 akan dijadikan DNS Slave, dan Skypie akan digunakan sebagai Web Server. Terdapat 2 Client yaitu Loguetown, dan Alabasta. Semua node terhubung pada router Foosha, sehingga dapat mengakses internet.
 
+1. Pertama, mengatur topologi dan edit network configuration sesuai dengan pengaturan diatas
+
+2. Selanjutnya melakukan Restart pada semua node
+
+3. Memasukkan `iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.196.0.0/16` pada Foosha
+
+4. Pada setiap node yang lain memasukkan `echo' nameserver"192.196.2.2"' > /etc/resolv.conf`
+
+5. Kemudian melakukan pengecekan PING pada node, disini kami mengecek pada node LogueTown
+
+![image](https://user-images.githubusercontent.com/65032157/139532689-4634d78b-fd8d-42b2-8bd3-3201838e5688.png)
+
+
 
 ## No 2
 Membuat website utama dengan mengakses franky.yyy.com dengan alias www.franky.yyy.com pada folder kaizoku
+
+Pada EniesLobby :
+1. menginstall bind9 dengan command `apt-get update` dan `apt-get install bind9 -y`
+2. Kemudian edit `/etc/bind/named.conf.local` dengan menambahkan :
+```
+    zone "franky.d09.com" {
+            type master;
+            file "/etc/bind/kaizoku/franky.d09.com";
+    };
+```
+3. membuat folder kaizoku `mkdir /etc/bind/kaizoku`
+4. melakukan copy `cp /etc/bind/db.local /etc/bind/kaizoku/franky.d09.com`
+5. mengedit /etc/bind/kaizoku/franky.d09.com seperti berikut :
+![image](https://user-images.githubusercontent.com/65032157/139532929-6e721beb-0aab-4eb3-90b2-762b85ced3fd.png)
+6. restart bind9 dengan `service bind9 restart`
+
+Pada Logue Town dan Alabasta
+1. Pada `/etc/resolv.conf` dilakukan perubahan nameserver menuju IP dari EniesLobby `nameserver 192.196.2.2`
+2. melakukan pengecekan PING
+
+Logue Town
+![image](https://user-images.githubusercontent.com/65032157/139533043-31414fce-7104-4769-8905-1c214cb340ca.png)
+
+Alabasta
+
+![image](https://user-images.githubusercontent.com/65032157/139533071-77c0ce40-65d6-41f7-acbe-e232b5991a9c.png)
 
 
 ## No 3
