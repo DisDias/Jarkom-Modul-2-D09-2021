@@ -81,7 +81,7 @@ EniesLobby akan dijadikan sebagai DNS Master, Water7 akan dijadikan DNS Slave, d
 
 3. Memasukkan `iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.196.0.0/16` pada Foosha
 
-4. Pada setiap node yang lain memasukkan `echo' nameserver"192.196.2.2"' > /etc/resolv.conf`
+4. Pada setiap node yang lain memasukkan `nameserver"192.196.2.2" > /etc/resolv.conf`
 
 5. Kemudian melakukan pengecekan PING pada node, disini kami mengecek pada node LogueTown
 
@@ -107,14 +107,13 @@ Pada EniesLobby :
 ![image](https://user-images.githubusercontent.com/65032157/139532929-6e721beb-0aab-4eb3-90b2-762b85ced3fd.png)
 6. restart bind9 dengan `service bind9 restart`
 
-Pada Logue Town dan Alabasta
+#### Testing
 1. Pada `/etc/resolv.conf` dilakukan perubahan nameserver menuju IP dari EniesLobby `nameserver 192.196.2.2`
-2. melakukan pengecekan PING
+2. melakukan pengecekan Logue Town
 
-Logue Town
 ![image](https://user-images.githubusercontent.com/65032157/139533043-31414fce-7104-4769-8905-1c214cb340ca.png)
 
-Alabasta
+3. pengecekan di Alabasta
 
 ![image](https://user-images.githubusercontent.com/65032157/139533071-77c0ce40-65d6-41f7-acbe-e232b5991a9c.png)
 
@@ -136,12 +135,13 @@ zone "super.franky.d09.com" {
 
 4. Restart bind9 `service bind9 restart` 
 
-#### Pada Alabasta dan Logue Town
-1. Dilakukan pengecekan subdomain
-a. LogueTown
+#### Testing
+1. Dilakukan pengecekan subdomain di LogueTown
+
 ![image](https://user-images.githubusercontent.com/65032157/139533328-65baa9ee-2e6a-44bf-aa0e-b37347cd0d13.png)
 
-b.Alabasta
+2. Pada alabasta
+
 ![image](https://user-images.githubusercontent.com/65032157/139533341-2163b51f-0779-4fe3-8a54-2af5a1c026ca.png)
 
 
@@ -158,6 +158,7 @@ zone "2.196.192.in-addr.arpa" {
 ```
 2. melakukan copy `cp /etc/bind/db.local /etc/bind/kaizoku/2.196.192.in-addr.arpa`
 3. melakukan edit pada `/etc/bind/kaizoku/2.196.192.in-addr.arpa` seperti berikut:
+
 ![image](https://user-images.githubusercontent.com/65032157/139533445-542444d5-1aac-4240-9882-7bd2c9eae1a3.png)
 4. Restart bind9 `service bind9 restart `
 
@@ -168,19 +169,104 @@ apt-get update
 apt-get install dnsutils
 ```
 
-2. Selanjutnya mengecek dengan melakukan `host -t PTR 192.196.2.2`
-a. Alabasta 
+2. Selanjutnya mengecek dengan melakukan `host -t PTR 192.196.2.2` pada alabasta
+
 ![image](https://user-images.githubusercontent.com/65032157/139533623-8505e937-6f7b-4230-a940-a4a98b619881.png)
 
-b. LogueTown
+3. pada Loguetown
+
 ![image](https://user-images.githubusercontent.com/65032157/139533639-de98ad49-287b-4183-a475-59c33b21593a.png)
 
 ## No 5
 Supaya tetap bisa menghubungi Franky jika server EniesLobby rusak, maka buat Water7 sebagai DNS Slave untuk domain utama
 
+#### EniesLobby
+1. Melakukan edit pada `Edit file /etc/bind/named.conf.local`
+```
+zone "franky.d09.com" {
+        type master;
+        notify yes;
+        also-notify { 192.196.2.3; }; // Masukan IP Water7 tanpa tanda petik
+        allow-transfer { 192.196.2.3; }; // Masukan IP Water7 tanpa tanda petik
+        file "/etc/bind/kaizoku/franky.d09.com";
+};
+```
+2. Restart bind9 `service bind9 restart`
+
+#### Water7
+1. melakukan `apt-get update` dan `apt-get install bind9 -y`
+2. setelah bind9 terinstall, dilakukan edit `pada /etc/bind/named.conf.local`:
+
+```
+zone "franky.d09.com" {
+    type slave;
+    masters { 192.196.2.2; };
+    file "/var/lib/bind/franky.d09.com";
+};
+```
+
+3. restart bind9 `service bind9 restart`
+
+#### Testing
+
+1. menambahkan pada `/etc/resolv.conf` dengan `nameserver 192.196.2.3 #IP Water7`
+2. melakukan stop bind9 pada enieslobby
+
+![image](https://user-images.githubusercontent.com/65032157/139534037-ddda5837-69fd-4d20-82ff-dcca9650d713.png)
+
+3. pengecekan pada Alabasta
+![image](https://user-images.githubusercontent.com/65032157/139534080-87f6158a-b9dc-4bf7-9d2c-b76ef580a2ed.png)
+
 
 ## No 6
 Setelah itu terdapat subdomain mecha.franky.yyy.com dengan alias www.mecha.franky.yyy.com yang didelegasikan dari EniesLobby ke Water7 dengan IP menuju ke Skypie dalam folder sunnygo.
+
+#### EniesLobby
+1. pada `/etc/bind/kaizoku/franky.d09.com` ditambahkan:
+```
+ns1   IN      A       192.196.2.3 ;IP Water7
+mecha   IN      A       ns1
+```
+2. Mengedit serta menambah code pada file `/etc/bind/named.conf.options` dengan :
+```
+//dnssec-validation auto;
+allow-query{any;};
+```
+3.  Mengedit  pada `/etc/bind/named.conf.local`
+```
+zone "franky.d09.com" {
+        type master;
+        allow-transfer { 192.196.2.3; };
+        file "/etc/bind/kaizoku/franky.d09.com";
+};
+
+zone "2.196.192.in-addr.arpa" {
+    type master;
+    file "/etc/bind/kaizoku/2.196.192.in-addr.arpa";
+};
+```
+4. Restart bind9 `service bind9 restart`
+
+#### Water7
+
+1. Mengedit serta menambah code pada file `/etc/bind/named.conf.options` dengan :
+```
+//dnssec-validation auto;
+allow-query{any;};
+```
+2. membuat folder sunnygo `mkdir /etc/bind/kaizoku`
+3. melakukan copy `cp /etc/bind/db.local /etc/bind/sunnygo/mecha.franky.d09.com`
+4. mengedit /etc/bind/sunnygo/mecha.franky.d09.comm seperti berikut :
+![image](https://user-images.githubusercontent.com/65032157/139534352-618ec56f-dc78-4049-9553-ff8196a82085.png)
+
+6. restart bind9 dengan `service bind9 restart`
+
+#### Testing
+1. alabasta
+![image](https://user-images.githubusercontent.com/65032157/139534395-588897f4-ce82-4d4d-be54-b0b73d9e52af.png)
+
+2. loguetown
+ ![image](https://user-images.githubusercontent.com/65032157/139534418-10406867-8885-4763-a707-87176e343c86.png)
 
 
 ## No 7
