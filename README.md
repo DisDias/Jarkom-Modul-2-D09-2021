@@ -431,3 +431,5 @@ Pertama buka Skypie, kemudian pindah ke `/etc/apache2/sites-available` lalu buka
 <img src="img/M02-E2.jpg">
 
 - Terkadang lupa menjalankan script yang seharusnya dijalankan terlebih dahulu sebelum menajalankan script untuk menyelesaikan soal.
+- Kami mengalami kendala dalam penyelesaian soal nomor 14-17 sehingga soal-soal tersebut tidak kami kerjakan.
+- Pada pengerjaan pertama kami tidak menyimpan konfigurasi untuk tiap soal dalam script sehingga kami harus mengetik ulang konfigurasinya jika ingin mengerjakan lagi.
