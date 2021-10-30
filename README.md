@@ -173,6 +173,8 @@ Kemudian buat directory baru dengan nama `franky.d09.com` pada `/var/www/` mengg
 ```
 Kemudian jalankan perintah `a2ensite franky.d09.com ` dan `service apache2 restart`.
 
+<img src="img/M02-8.png">
+
 
 ## No 9
 Setelah itu, Luffy juga membutuhkan agar url www.franky.yyy.com/index.php/home dapat menjadi menjadi www.franky.yyy.com/home.
@@ -191,6 +193,8 @@ Setelah itu, buka file `/etc/apache2/sites-available/franky.d09.com.conf` dan ta
     </Directory>
 ```
 Setelah itu, jalankan perintah `service bind9 restart` dan testing.
+
+<img src="img/M02-9.png">
 
 
 ## No 10
@@ -211,10 +215,12 @@ Kemudian buat directory baru dengan nama `super.franky.d09.com` pada `/var/www/`
 ```
 Kemudian jalankan perintah `a2ensite super.franky.d09.com ` dan `service apache2 restart`.
 
+<img src="img/M02-10.png">
+
 
 ## No 11
 Akan tetapi, pada folder /public, Luffy ingin hanya dapat melakukan directory listing saja.
-
+n
 Pertama buka Skypie, kemudian pindah ke `/etc/apache2/sites-available` lalu buka file `super.franky.d09.com.conf` dan tambahkan isinya sebagai berikut :
 ```
     <Directory /var/www/super.franky.d09.com/public>
@@ -223,16 +229,22 @@ Pertama buka Skypie, kemudian pindah ke `/etc/apache2/sites-available` lalu buka
 ```
 Setelah itu, jalankan perintah `service bind9 restart` dan testing.
 
+<img src="img/M02-11.png">
+
 
 ## No 12
 Tidak hanya itu, Luffy juga menyiapkan error file 404.html pada folder /errors untuk mengganti error kode pada apache.
 
 Pertama buka Skypie, kemudian pindah ke `/etc/apache2/sites-available` lalu buka file `super.franky.d09.com.conf` dan tambahkan isinya dengan `ErrorDocument 404 /error/404.html`.
 
+<img src="img/M02-12.png">
+
 
 ## No 13
 Luffy juga meminta Nami untuk dibuatkan konfigurasi virtual host. Virtual host ini bertujuan untuk dapat mengakses file asset www.super.franky.yyy.com/public/js menjadi www.super.franky.yyy.com/js.
 Pertama buka Skypie, kemudian pindah ke `/etc/apache2/sites-available` lalu buka file `super.franky.d09.com.conf` dan tambahkan isinya dengan `Alias "/js" "/var/www/super.franky.d09.com/public/js"`
+
+<img src="img/M02-13.png">
 
 
 ## No 14
@@ -330,3 +342,8 @@ Setelah itu, buka `/var/www/super.franky.d09.com/.htaccess` dan tambahkan :
 
 
 ## Error dan Kendala
+- Kesalahan dalam pembuatan script (kami membuat setiap soal beda script tidak jadi satu) sehingga konfigurasinya berubah mengikuti perintah yang baru bukan menggabungkan dari awal.
+
+<img src="img/M02-E1.png">
+
+<img src="img/M02-E2.png">
