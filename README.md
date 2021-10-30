@@ -298,6 +298,9 @@ Setelah itu, menambahkan zone pada `/etc/bind/named.conf.local` sebagai berikut 
 Lalu copy `/etc/bind/db.local` menjadi `/etc/bind/sunnygo/general.mecha.franky.d09.com`. Kemudian, lakukan konfigurasi file agar memiliki SOA `general.mecha.franky.d09.com.`, NS `general.mecha.franky.d09.com.`, record A yang mengarah ke `IP Skypie`, dan CNAME `www` pada `general.mecha.franky.d09.com.`.
 Setelah itu, jalankan perintah `service bind9 restart` dan testing.
 
+![image](https://user-images.githubusercontent.com/65032157/139535034-a074ac69-af96-4d01-9e03-b5683c359f29.png)
+
+
 
 ## No 8
 Setelah melakukan konfigurasi server, maka dilakukan konfigurasi Webserver. Pertama dengan webserver www.franky.yyy.com. Pertama, luffy membutuhkan webserver dengan DocumentRoot pada /var/www/franky.yyy.com.
